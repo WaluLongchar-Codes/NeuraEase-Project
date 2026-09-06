@@ -2,11 +2,11 @@
 
 **NeuraEase** is a browser-based interface designed to communicate with DIY neurostimulation hardware via the **Web Serial API**. 
 
-> ⚠️ **Disclaimer:** This is an experimental test-protocol project built strictly for research, simulation, and testing purposes. It is not an approved medical device.
+>  **Disclaimer:** This is an experimental test-protocol project built strictly for research, simulation, and testing purposes. It is not an approved medical device.
 
 ---
 
-### 📌 Project Overview & Purpose
+###  Project Overview & Purpose
 The platform tests and tracks stimulation protocols across three experimental focus areas:
 * **Anxiety / Depression:** Left DLPFC (F3) anode target protocol.
 * **Cognitive Enhancement:** Frontal cortex montage targeting focus.
@@ -16,7 +16,7 @@ It allows operators to configure session parameters (duration and safety-capped 
 
 ---
 
-### 🛠️ Hardware Requirements
+###  Hardware Requirements
 To complete the full physical setup, you will need:
 * **Arduino Uno** (or compatible microcontroller)
 * **tDCS Current Control Circuit** (constant-current source / regulator stage)
@@ -27,7 +27,7 @@ To complete the full physical setup, you will need:
 
 ---
 
-### ✨ Key Features
+###  Key Features
 * **Browser-to-Hardware Control:** Direct two-way serial communication with the Arduino without requiring native desktop apps.
 * **Preset Montage Guides:** Visual anode/cathode placement instructions for each testing protocol.
 * **Safety Limits:** Enforced default parameter caps (≤3.0 mA, ≤5 min) for initial trials.
