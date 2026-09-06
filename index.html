@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>NeuraEase tDCS Controller</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        /* Black background and base styling */
+        body {
+            background-color: #000000;
+            color: #000000;
+            margin: 80;
+            padding: 80;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Optional: Add some modern dark theme styling */
+        .container {
+            background: #000000cc;
+            border-radius: 20px;
+            padding: 80px;
+            margin: 80px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Ensure good contrast for text */
+        h1, h2, h3, h4, h5, h6 {
+            color: #ffffff;
+        }
+
+        /* Style links for dark background */
+        a {
+            color: #60a5fa;
+        }
+
+        a:hover {
+            color: #93c5fd;
+        }
+    </style>
+</head>
+<body class="bg-black text-black">
+    <!-- Your content goes here -->
+    <div class="container mx-auto p-4">
+  
+    <script>
+        // Your JavaScript code here
+        console.log("Page loaded with black background");
+    </script>
+</body>
+</html>
+<style>
+    #particles-js {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+    
+    #app-container {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+   <style>
+        :root {
+            --primary-green: #10B981;
+            --primary-red: #EF4444;
+            --accent-blue: #3B82F6;
+        }
+        .text-primary-green { color: var(--primary-green); }
+        .bg-primary-green { background-color: var(--primary-green); }
+        .hover\:bg-primary-green\/90:hover { background-color: rgba(16, 185, 129, 0.9); }
+        .text-primary-red { color: var(--primary-red); }
+        .bg-primary-red { background-color: var(--primary-red); }
+        .hover\:bg-primary-red\/90:hover { background-color: rgba(239, 68, 68, 0.9); }
+        .text-accent-blue { color: var(--accent-blue); }
+        .hover\:bg-accent-blue\/10:hover { background-color: rgba(59, 130, 246, 0.1); }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-green);
+            cursor: pointer;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            transition: background 0.2s;
+        }
+        
+        .mood-emoji {
+            font-size: 2.5rem;
+            padding: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.1s ease-in-out, background-color 0.1s;
+            border-radius: 50%;
+        }
+        .mood-emoji:hover {
+            transform: scale(1.1);
+            background-color: #f3f4f6;
+        }
+        .mood-emoji.selected {
+            border: 3px solid var(--accent-blue);
+            background-color: #DBEAFE;
+        }
+
+        #app-container {
+            max-width: 450px;
+            width: 95%;
+            margin: 20px auto;
+            padding: 1.5rem;
+            background: #ffffff;
+            border-radius: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+        .mood-change-graph {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 20px;
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            margin-top: 5px;
+            position: relative;
+        }
+        .mood-bar {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+            position: absolute;
+            left: 0;
+        }
+        .mood-bar-pre {
+            background-color: #9cd6b2; /* Light green */
+        }
+        .mood-bar-post {
+            background-color: #10B981; /* Primary green */
+        }
+        .mood-indicator {
+            position: absolute;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: black;
+            padding: 0 5px;
+            text-shadow: 0 0 2px rgba(0,0,0,0.5);
+            line-height: 20px;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-green': 'var(--primary-green)',
+                        'primary-red': 'var(--primary-red)',
+                        'accent-blue': 'var(--accent-blue)',
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 font-sans antialiased min-h-screen">
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+
+    <div id="app-container">
+        <!-- Your existing content -->
+        
+
+        <div class="space-y-4 mb-6 border-b pb-4 border-gray-100">
+            <h1 class="text-3xl font-extrabold text-gray-900 flex items-center">
+                <i class="fa-solid fa-brain "style="color: #e8c096;"></i> NeuraEase
+            </h1>
+            
+
+            <div class="flex items-center justify-between p-3 bg-gray-100 rounded-xl shadow-inner">
+                <div class="flex items-center space-x-2">
+                    <span id="serial-status-icon" class="w-3 h-3 rounded-full bg-primary-red"></span>
+                    <p id="serial-status-text" class="text-sm font-semibold text-primary-red">Disconnected (Click to Connect)</p>
+                </div>
+                <button id="connect-button" onclick="connectSerial()"
+                        class="px-4 py-2 text-xs font-bold rounded-lg text-black bg-accent-blue hover:bg-accent-blue/90 transition duration-200">
+                    Connect Arduino
+                </button>
+            </div>
+        </div>
+
+        <div id="welcome-view" class="space-y-6">
+            <h2 class="text-2xl font-bold text-black">Welcome to NeuraEase</h2>
+            <p class="text-black-600">This interface controls your tDCS hardware via Web Serial API. Ensure your device is plugged in before connecting.</p>
+            <div class="flex space-x-4">
+                <button onclick="changeView('info')"
+                        class="flex-1 py-3 text-black-100 text-lg font-bold rounded-xl shadow-lg transition duration-200 bg-green-500 hover:bg-primary-green/90">
+                    Get Started
+                </button>
+            </div>
+        </div>
+
+        <div id="info-view" class="space-y-6 hidden">
+            <button onclick="changeView('welcome')" class="px-3 py-2 text-sm text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition">← Back to Welcome</button>
+            <h2 class="text-2xl font-bold text-black">Important Safety Information</h2>
+            <ul class="list-disc list-inside space-y-2 text-sm text-gray-700 p-4 bg-yellow-50 rounded-xl border border-yellow-200">
+                <li class="font-bold text-yellow-700">DO NOT use this device if you have epilepsy, a pacemaker, or metallic implants near the stimulation site.</li>
+                <li>Ensure electrodes are properly moistened and placed correctly before starting a session.</li>
+                <li>If you experience discomfort, stop the session immediately using the STOP button.</li>
+            </ul>
+            <p class="text-base font-semibold">Is this your first time using NeuraEase?</p>
+            <div class="flex space-x-4">
+                <button onclick="changeView('main', true)"
+                        class="flex-1 py-3 text-black text-lg font-bold rounded-xl shadow-lg transition duration-200 bg-green-500 hover:bg-primary-green/90">
+                    Yes, First Time (Start with Safety Limits)
+                </button>
+                <button onclick="changeView('main', false)"
+                        class="flex-1 py-3 text-black-100 text-lg font-bold rounded-xl shadow-lg transition duration-200 bg-green-500 hover:bg-primary-green/90">
+                    No, Experienced User
+                </button>
+            </div>
+        </div>
+
+        <div id="main-view" class="space-y-6 hidden">
+            <button onclick="changeView('info')" class="px-3 py-2 text-sm text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition">← Back to Info</button>
+            <h2 class="text-2xl font-bold text-black">Session Setup</h2>
+
+            <div id="safety-notice" class="p-4 bg-primary-red/10 border-2 border-primary-red rounded-xl text-sm font-semibold text-primary-red space-y-1 hidden">
+                <p class="font-bold">⚠️ FIRST-TIME USER SAFETY NOTICE</p>
+                <p>- Maximum Current: <span class="text-lg">3.0 mA</span></p>
+                <p>- Maximum Duration: <span class="text-lg">5 mins</span></p>
+                <p>These limits are enforced for your initial practice session.</p>
+            </div>
+
+            <div class="space-y-2">
+                <label for="patient-name-input" class="block text-black-700 font-semibold">Patient Name:</label>
+                <input type="text" id="patient-name-input" placeholder="Enter patient's name"
+                       class="w-full p-3 border border-gray-300 rounded-xl bg-gray-100 shadow-inner focus:ring-2 focus:ring-accent-blue focus:border-accent-blue transition duration-200 ease-in-out">
+                <p id="patient-name-error" class="text-sm text-primary-red hidden">Patient name is required.</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-black-700 font-semibold">Select Target Protocol:</label>
+                <div id="mode-dropdown-container" class="relative">
+                    <button id="mode-select-display" onclick="toggleDropdown()" type="button"
+                            class="w-full p-3 text-left border border-gray-300 rounded-xl bg-gray-100 shadow-inner hover:bg-grey-300focus:ring-2 focus:ring-primary-green focus:border-primary-green transition duration-200 ease-in-out flex justify-between items-center disabled:opacity-50">
+                        <span id="mode-display-text-span" class="font-semibold text-gray-600">Anxiety/Depression</span>
+                        <svg id="dropdown-arrow" class="w-5 h-5 text-gray-600 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+
+                    <ul id="mode-options"
+                        class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-lg overflow-hidden hidden transform opacity-0 scale-95 transition duration-150 ease-out origin-top">
+                        <li class="p-3 cursor-pointer bg-primary-green-500 hover:bg-primary-green/90 font-medium transition duration-100" onclick="selectMode('Anxiety/Depression')">Anxiety/Depression</li>
+                        <li class="p-3 cursor-pointer bg-primary-green-500 hover:bg-primary-green/90 font-medium transition duration-100" onclick="selectMode('Cognitive Enhancement')">Cognitive Enhancement</li>
+                        <li class="p-3 cursor-pointer bg-primary-green-500 hover:bg-primary-green/90 font-medium transition duration-100" onclick="selectMode('Pain Management')">Pain Management</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="space-y-2 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <label class="block text-black-700 font-semibold">Electrode Placement:</label>
+                <div id="diagram-content" class="text-sm font-mono text-black-800 p-2 bg-grey rounded-lg border border-dashed border-gray-300 overflow-x-auto">
+                </div>
+                <p class="text-xs text-black-500">🔴 Anode (Positive) | 🔵 Cathode (Negative)</p>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-black-700 font-semibold">Duration (minutes):</label>
+                <div class="flex items-center space-x-4">
+                    
+                    <input type="range" id="duration-slider" min="1" max="5" value="1" step="1"
+                            class="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-lg"
+                            oninput="updateDurationValue(this.value)">
+                             <span id="duration-display" class="w-24 text-right text-2xl font-bold text-primary-black">1 min</span>
+                </div>
+                <p class="text-xs text-black-500 text-right">Available options: 1, 2, 3, 4, 5 min</p>
+            </div>
+
+            <div class="flex space-x-4 pt-4">
+                <button id="start-button" onclick="startSimulation()" type="button" disabled
+                        class="w-full p-3 border border-gray-300 rounded-xl bg-gray-100 shadow-inner focus:ring-2 flex-1 py-3 text-black text-lg font-bold rounded-xl shadow-lg transition duration-200 ease-in-out bg-primary-green-500 hover:bg-primary-green/90 disabled:bg-green-20 disabled:shadow-none">
+                    START SESSION
+                </button>
+                <button id="stop-button" onclick="stopSimulation()" disabled type="button"
+                        class="w-full p-3 border border-gray-300 rounded-xl bg-gray-100 shadow-inner focus:ring-2 flex-1 py-3 text-black text-lg font-bold rounded-xl shadow-lg transition duration-200 ease-in-out bg-primary-red-500 hover:bg-primary-red/90 disabled:bg-red-20s disabled:shadow-none">
+                    STOP
+                </button>
+            </div>
+  
+            <div class="pt-2 min-h-[4rem] flex flex-col items-center justify-center text-center">
+                <p id="status-display" class="text-base font-semibold text-gray-900">STATUS: Idle</p>
+            </div>
+             <div class="pt-2 flex space-x-2">
+                <button onclick="changeView('history')" type="button"
+                        class="flex-1 py-3 text-sm text-accent-blue font-semibold rounded-xl hover:bg-accent-blue/10 transition duration-200">
+                    📊 View Session History (<span id="history-count" class="font-extrabold">0</span>)
+                </button>
+            </div>
+            
+        </div>
+
+       <div id="history-view" class="space-y-6 hidden">
+            <h2 class="text-2xl font-bold text-primary-green">Session History</h2>
+            
+            <div class="flex justify-between items-center">
+
+                <div class="flex space-x-2">
+    <button onclick="exportHistory()" 
+            class="px-3 py-2 text-sm text-primary-green border border-primary-green rounded-lg hover:bg-primary-green/10 transition duration-200">
+        Export CSV
+    </button>
+    <button onclick="exportGraphAsPNG()" type="button"
+        class="px-3 py-2 text-sm text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-600/10 transition duration-200">
+    📊 Export Graph
+</button>
+    <button onclick="showAdvancedAnalytics()" 
+            class="px-3 py-2 text-sm text-purple-600 border border-purple-600 rounded-lg hover:bg-purple-600/10 transition duration-200">
+        Advanced Analysis
+    </button>
+    <button onclick="clearHistory()" 
+            class="px-3 py-2 text-sm text-white bg-primary-red rounded-lg hover:bg-primary-red/90 transition duration-200">
+        Clear All
+    </button>
+</div>
+            </div>
+
+            <div id="history-list" class="space-y-4 max-h-[50vh] overflow-y-auto p-1">
+                <p id="no-history-message" class="text-gray-500 italic text-center py-8">No sessions recorded yet.</p>
+            </div>
+
+            <button onclick="changeView('main')"
+                    class="w-full py-3 text-gray-700 bg-gray-200 text-lg font-bold rounded-xl transition duration-200 ease-in-out hover:bg-gray-300">
+                Back to Controls
+            </button>
+        </div>
+
+    <div id="graph-view" class="space-y-6 hidden">
+    <h2 class="text-2xl font-bold text-primary-green">Mood Analysis Graph</h2>
+    <canvas id="mood-chart" width="400" height="300"></canvas>
+    <div class="flex space-x-4">
+        <button onclick="exportGraphAsPNG()" 
+                class="flex-1 py-3 text-white text-lg font-bold rounded-xl shadow-lg transition duration-200 ease-in-out bg-primary-green hover:bg-primary-green/90">
+            Export Graph as PNG
+        </button>
+        <button onclick="changeView('history')"
+                class="flex-1 py-3 text-gray-500 bg-gray-200 text-lg font-bold rounded-xl transition duration-200 ease-in-out hover:bg-gray-300">
+            Back to History
+        </button>
+    </div>
+    <button onclick="changeView('graph')" 
+        class="w-full py-3 text-accent-blue bg-blue-50 text-lg font-bold rounded-xl transition duration-200 ease-in-out hover:bg-blue-100">
+    📈 View Mood Graph
+</button>
+</div>
+<script>
+function drawMoodChart() {
+    const canvas = document.getElementById('mood-chart');
+    const ctx = canvas.getContext('2d');
+
+    // Clear the canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // We need data: sessions that have both pre and post mood
+    const validSessions = sessionHistory.filter(s => s.preMood && s.postMood);
+
+    if (validSessions.length === 0) {
+        ctx.font = '16px Arial';
+        ctx.fillText('No mood data available', 10, 50);
+        return;
+    }
+
+    // We'll plot pre and post mood for each session (by date)
+    const dates = validSessions.map(s => new Date(s.timestamp).toLocaleDateString());
+    const preMoodValues = validSessions.map(s => getMoodNumericValue(s.preMood));
+    const postMoodValues = validSessions.map(s => getMoodNumericValue(s.postMood));
+
+    // Chart dimensions
+    const padding = 40;
+    const chartWidth = canvas.width - padding * 2;
+    const chartHeight = canvas.height - padding * 2;
+
+    // Find the max mood value (4) and min (1) but we can set to 4 and 0 for padding
+    const maxMood = 4;
+    const minMood = 0;
+
+    // X and Y scale
+    const xScale = chartWidth / (dates.length - 1);
+    const yScale = chartHeight / (maxMood - minMood);
+
+    // Draw axes
+    ctx.beginPath();
+    ctx.moveTo(padding, padding);
+    ctx.lineTo(padding, padding + chartHeight);
+    ctx.lineTo(padding + chartWidth, padding + chartHeight);
+    ctx.strokeStyle = '#000';
+    ctx.stroke();
+
+    // Draw labels for Y axis (mood levels)
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    for (let i = minMood; i <= maxMood; i++) {
+        const y = padding + chartHeight - (i - minMood) * yScale;
+        ctx.fillText(i, padding - 5, y);
+    }
+
+    // Draw labels for X axis (dates)
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    dates.forEach((date, index) => {
+        const x = padding + index * xScale;
+        ctx.fillText(date, x, padding + chartHeight + 10);
+    });
+
+    // Draw pre-mood line
+    ctx.beginPath();
+    preMoodValues.forEach((value, index) => {
+        const x = padding + index * xScale;
+        const y = padding + chartHeight - (value - minMood) * yScale;
+        if (index === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    });
+    ctx.strokeStyle = 'blue';
+    ctx.stroke();
+
+    // Draw post-mood line
+    ctx.beginPath();
+    postMoodValues.forEach((value, index) => {
+        const x = padding + index * xScale;
+        const y = padding + chartHeight - (value - minMood) * yScale;
+        if (index === 0) {
+            ctx.moveTo(x, y);
+        } else {
+            ctx.lineTo(x, y);
+        }
+    });
+    ctx.strokeStyle = 'green';
+    ctx.stroke();
+
+    // Draw legend
+    ctx.fillStyle = 'blue';
+    ctx.fillText('Pre-session', padding + chartWidth - 100, padding - 20);
+    ctx.fillStyle = 'green';
+    ctx.fillText('Post-session', padding + chartWidth - 100, padding - 5);
+}
+    
+        // Add these functions for history management
+        function clearHistory() {
+            if (sessionHistory.length === 0) {
+                alert("No history to clear.");
+                return;
+            }
+            
+            if (confirm("Are you sure you want to clear ALL session history? This action cannot be undone.")) {
+                sessionHistory = [];
+                localStorage.removeItem('neuraease_history');
+                renderHistory();
+                updateHistoryCount();
+                updateStatus("All session history cleared.", 'text-primary-red');
+            }
+        }
+
+        function exportHistory() {
+            if (sessionHistory.length === 0) {
+                alert("No session history to export.");
+                return;
+            }
+
+            const csvContent = "data:text/csv;charset=utf-8," 
+                + "Patient Name,Protocol,Current,Duration,Pre Mood,Post Mood,Outcome,Timestamp\n"
+                + sessionHistory.map(session => 
+                    `"${session.patientName || 'N/A'}","${session.protocol}","${session.current}","${session.duration}","${session.preMood || 'N/A'}","${session.postMood || 'N/A'}","${session.notes}","${session.timestamp}"`
+                ).join("\n");
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `neuraease_history_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            updateStatus("Session history exported successfully.", 'text-primary-green');
+        }
+        function exportGraphAsPNG() {
+  const canvas = document.getElementById('mood-chart');
+  if (!canvas) return alert("No graph to export.");
+
+  // Redraw before export
+  if (typeof drawMoodChart === 'function') {
+      drawMoodChart();
+  }
+
+  // Create a temporary white-background copy
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width = canvas.width;
+  exportCanvas.height = canvas.height;
+  const ctx = exportCanvas.getContext('2d');
+
+  ctx.fillStyle = "#FFFFFF";
+  ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+  ctx.drawImage(canvas, 0, 0);
+
+  const link = document.createElement('a');
+  link.download = `neuraease_mood_graph_${new Date().toISOString().split('T')[0]}.png`;
+  link.href = exportCanvas.toDataURL("image/png");
+  link.click();
+
+  updateStatus("Graph exported as PNG.", "text-primary-green");
+}
+
+function showAdvancedAnalytics() {
+    if (sessionHistory.length === 0) {
+        alert("No session data available for analysis.");
+        return;
+    }
+
+    const moodSessions = sessionHistory.filter(session => session.preMood && session.postMood);
+    
+    if (moodSessions.length === 0) {
+        alert("No sessions with complete mood data for analysis.");
+        return;
+    }
+
+    // Calculate statistics
+    let totalImprovement = 0;
+    let sessionsWithImprovement = 0;
+    let maxImprovement = 0;
+    let bestSession = null;
+
+    moodSessions.forEach(session => {
+        const preVal = getMoodNumericValue(session.preMood);
+        const postVal = getMoodNumericValue(session.postMood);
+        const improvement = postVal - preVal;
+
+        if (improvement > 0) {
+            totalImprovement += improvement;
+            sessionsWithImprovement++;
+            
+            if (improvement > maxImprovement) {
+                maxImprovement = improvement;
+                bestSession = session;
+            }
+        }
+    });
+
+    const avgImprovement = sessionsWithImprovement > 0 ? (totalImprovement / sessionsWithImprovement).toFixed(2) : 0;
+    const successRate = Math.round((sessionsWithImprovement / moodSessions.length) * 100);
+
+    // Show analysis in a modal or alert
+    let analysisText = `📊 ADVANCED ANALYSIS\n\n`;
+    analysisText += `Total Sessions with Mood Data: ${moodSessions.length}\n`;
+    analysisText += `Sessions with Improvement: ${sessionsWithImprovement}\n`;
+    analysisText += `Success Rate: ${successRate}%\n`;
+    analysisText += `Average Improvement: +${avgImprovement} points\n`;
+    
+    if (bestSession) {
+        analysisText += `Best Session: ${bestSession.preMood} → ${bestSession.postMood} (+${maxImprovement})\n`;
+        analysisText += `Protocol: ${bestSession.protocol}\n`;
+        analysisText += `Duration: ${bestSession.duration}`;
+    }
+
+    alert(analysisText);
+}
+
+        function updateHistoryCount() {
+            historyCountSpan.textContent = sessionHistory.length;
+        }
+
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            const noHistoryMessage = document.getElementById('no-history-message');
+            const totalSessionsSpan = document.getElementById('total-sessions');
+
+            totalSessionsSpan.textContent = sessionHistory.length;
+            updateHistoryCount();
+            updateAnalytics();
+
+            if (sessionHistory.length === 0) {
+                noHistoryMessage.classList.remove('hidden');
+                return;
+            }
+
+            noHistoryMessage.classList.add('hidden');
+
+            sessionHistory.forEach((session, index) => {
+                const date = new Date(session.timestamp);
+                const formattedDate = date.toLocaleDateString();
+                const formattedTime = date.toLocaleTimeString();
+                
+                const historyItem = document.createElement('div');
+                historyItem.className = 'p-4 bg-white border border-gray-200 rounded-xl shadow-sm space-y-3';
+                
+                // Create mood graph if both pre and post moods are available
+                let moodGraphHtml = '';
+                if (session.preMood && session.postMood) {
+                    const preVal = getMoodNumericValue(session.preMood);
+                    const postVal = getMoodNumericValue(session.postMood);
+                    const maxMood = 4;
+
+                    const preWidth = (preVal / maxMood) * 100;
+                    const postWidth = (postVal / maxMood) * 100;
+
+                    moodGraphHtml = `
+                        <div class="mt-2">
+                            <p class="text-xs text-gray-600 mb-1">Mood Progression:</p>
+                            <div class="mood-change-graph relative overflow-hidden">
+                                <div class="mood-bar mood-bar-pre" style="width: ${preWidth}%;"></div>
+                                <div class="mood-bar mood-bar-post" style="width: ${postWidth}%;"></div>
+                                <span class="mood-indicator absolute left-0" style="left: ${Math.max(5, preWidth - 15)}%;">Pre: ${session.preMood}</span>
+                                <span class="mood-indicator absolute right-0" style="right: ${Math.max(5, 100 - postWidth - 15)}%;">Post: ${session.postMood}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                historyItem.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="font-bold text-gray-800 text-lg">${session.patientName || 'Unknown Patient'}</p>
+                            <p class="text-sm text-gray-600">${session.protocol}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-gray-500">${formattedDate}</p>
+                            <p class="text-xs text-gray-500">${formattedTime}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-gray-600">Duration</p>
+                            <p class="font-semibold">${session.duration}</p>
+                        </div>
+                        <div class="bg-gray-50 p-2 rounded">
+                            <p class="text-gray-600">Current</p>
+                            <p class="font-semibold">${session.current}</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div class="bg-blue-50 p-2 rounded">
+                            <p class="text-gray-600">Pre-session Mood</p>
+                            <p class="text-2xl">${session.preMood || 'N/A'}</p>
+                        </div>
+                        <div class="bg-green-50 p-2 rounded">
+                            <p class="text-gray-600">Post-session Mood</p>
+                            <p class="text-2xl">${session.postMood || 'N/A'}</p>
+                        </div>
+                    </div>
+
+                    ${moodGraphHtml}
+
+                    <div class="pt-2 border-t border-gray-100">
+                        <p class="text-sm font-semibold ${getMoodArrow(session.preMood, session.postMood) === '⬆️' ? 'text-primary-green' : getMoodArrow(session.preMood, session.postMood) === '⬇️' ? 'text-primary-red' : 'text-gray-600'}">
+                            ${session.notes} ${session.preMood && session.postMood ? getMoodArrow(session.preMood, session.postMood) : ''}
+                        </p>
+                    </div>
+                `;
+                
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        function getMoodArrow(pre, post) {
+            if (!pre || !post) return '';
+            
+            const preVal = getMoodNumericValue(pre);
+            const postVal = getMoodNumericValue(post);
+
+            if (postVal > preVal) return '⬆️';
+            if (postVal < preVal) return '⬇️';
+            return '➡️';
+        }
+
+        function getMoodNumericValue(emoji) {
+            const moodMap = { '😔': 1, '😐': 2, '😊': 3, '🤩': 4 };
+            return moodMap[emoji] || 0;
+        }
+
+[
+    {
+        "type": "setting",
+        "details": {
+            "key": "Add deleteHistoryEntry function and modify renderHistory to include Delete button",
+            "value": "function deleteHistoryEntry(index) {\n    if (typeof index !== 'number' || index < 0 || index >= sessionHistory.length) return;\n\n    const entry = sessionHistory[index];\n    const patient = entry.patientName || 'Unknown Patient';\n    const when = new Date(entry.timestamp).toLocaleString();\n\n    if (!confirm(`Delete session for ${patient} on ${when}? This cannot be undone.`)) return;\n\n    sessionHistory.splice(index, 1);\n    saveHistory();\n    renderHistory();\n    updateStatus('Session deleted.', 'text-primary-red');\n}\n\n/* Example change inside renderHistory(): add the Delete button next to date/time for each historyItem */\n\n// Replace the right-hand block in historyItem.innerHTML header with this (inside the loop where index is available):\n// <div class=\"text-right\">\n//     <p class=\"text-xs text-gray-500\">${formattedDate}</p>\n//     <p class=\"text-xs text-gray-500\">${formattedTime}</p>\n//     <button onclick=\"deleteHistoryEntry(${index})\" class=\"mt-2 px-2 py-1 text-xs text-white bg-primary-red rounded-lg hover:bg-primary-red/90\">Delete</button>\n// </div>\n\n/* If renderHistory builds the card via template string, insert the button markup above into that template. */"
+         } }
+]
+        // Update the saveHistory function to also update analytics
+        function saveHistory() {
+            localStorage.setItem('neuraease_history', JSON.stringify(sessionHistory));
+            updateHistoryCount();
+            updateAnalytics();
+        }
+    </script>
+
+        <div id="mood-pre-view" class="space-y-6 hidden text-center">
+    <h2 class="text-2xl font-bold text-primary-green">Pre-Session Mood Check</h2>
+    <p class="text-gray-700">How do you feel right now? This will help us measure the session's impact.</p>
+    <div class="flex justify-center space-x-4 p-4">
+        <span class="mood-emoji" onclick="selectMoodEmoji('Pre', '😔')" title="Very Sad">😔</span>
+        <span class="mood-emoji" onclick="selectMoodEmoji('Pre', '😐')" title="Neutral">😐</span>
+        <span class="mood-emoji" onclick="selectMoodEmoji('Pre', '😊')" title="Happy">😊</span>
+        <span class="mood-emoji" onclick="selectMoodEmoji('Pre', '🤩')" title="Excellent">🤩</span>
+    </div>
+    <p id="pre-mood-status" class="text-sm text-primary-green min-h-[1.5rem]"></p>
+    <button onclick="startSimulationWithMood()"
+            class="w-full py-3 text-white text-lg font-bold rounded-xl shadow-lg transition duration-200 ease-in-out bg-primary-green hover:bg-primary-green/90">
+        Start Session
+    </button>
+    <button onclick="changeView('main')"
+            class="w-full py-3 text-gray-600 bg-gray-100 text-sm font-semibold rounded-xl transition duration-200 ease-in-out hover:bg-gray-200">
+        Skip Mood Check
+    </button>
+</div>
+
+        <div id="mood-post-view" class="space-y-6 hidden text-center">
+             <h2 class="text-2xl font-bold text-primary-green">Session Complete!</h2>
+             <p class="text-gray-700">How do you feel immediately after the session?</p>
+             <div class="flex justify-center space-x-4 p-4">
+                 <span class="mood-emoji" onclick="selectMoodEmoji('Post', '😔')">😔</span>
+                 <span class="mood-emoji" onclick="selectMoodEmoji('Post', '😐')">😐</span>
+                 <span class="mood-emoji" onclick="selectMoodEmoji('Post', '😊')">😊</span>
+                 <span class="mood-emoji" onclick="selectMoodEmoji('Post', '🤩')">🤩</span>
+             </div>
+             <p id="post-mood-status" class="text-sm text-primary-red min-h-[1.5rem]"></p>
+
+             <div id="feedback-summary" class="p-4 bg-primary-green/10 rounded-xl border border-primary-green/30 text-left text-sm hidden">
+                 <p class="font-bold text-primary-green mb-1">Session Summary:</p>
+                 <p><strong>Patient:</strong> <span id="summary-patient-name"></span></p>
+                 <p><strong>Protocol:</strong> <span id="summary-protocol"></span></p>
+                 <p><strong>Parameters:</strong> <span id="summary-params"></span></p>
+                 <p><strong>Mood Change:</strong> <span id="summary-mood-change"></span></p>
+             </div>
+
+             <button onclick="completeSession()"
+                     class="w-full py-3 text-white text-lg font-bold rounded-xl shadow-lg transition duration-200 ease-in-out bg-primary-green hover:bg-primary-green/90">
+                 Finish & Go Back to Controls
+             </button>
+        </div>
+
+        <div id="history-view" class="space-y-6 hidden">
+            <h2 class="text-2xl font-bold text-primary-green">Session History</h2>
+            <div id="history-list" class="space-y-4 max-h-[60vh] overflow-y-auto p-1">
+                <p id="no-history-message" class="text-gray-500 italic text-center">No sessions recorded yet.</p>
+            </div>
+            <button onclick="changeView('main')"
+                    class="w-full py-3 text-gray-700 bg-gray-200 text-lg font-bold rounded-xl transition duration-200 ease-in-out hover:bg-gray-300">
+                Back to Controls
+            </button>
+        </div>
+
+        <div class="border-t pt-4 mt-4 border-gray-100 text-center text-xs text-black-500 space-y-2">
+            <p class="font-bold text-black-700">Crisis Support (India)</p>
+            <p>
+                KIRAN Helpline: 1800-599-0019 (24/7)<br>
+                AASRA: +91 98204 66726 (24/7)
+            </p>
+            <p class="text-primary-red font-bold pt-2">
+                DISCLAIMER: This is a software simulation. Consult a medical professional for actual mental health or tDCS advice.
+            </p>
+        </div>
+
+    </div>
+
+    <script>
+        let port = null;
+        let writer = null;
+        let isSessionActive = false;
+        const serialStatusText = document.getElementById('serial-status-text');
+        const serialStatusIcon = document.getElementById('serial-status-icon');
+        const connectButton = document.getElementById('connect-button');
+        const patientNameInput = document.getElementById('patient-name-input');
+        const patientNameError = document.getElementById('patient-name-error');
+
+        // Track last sent command and timestamp to correlate device acknowledgements
+        let lastSentCommand = null;
+        let lastSentTime = 0;
+
+        async function connectSerial() {
+            if (!("serial" in navigator)) {
+                updateSerialStatus('ERROR: Web Serial API not supported.', 'primary-red', false);
+                return;
+            }
+
+            try {
+                updateSerialStatus('Awaiting port selection...', 'accent-blue', true);
+                port = await navigator.serial.requestPort();
+
+                await port.open({ baudRate: 9600 });
+                updateSerialStatus('Serial Port Opened. Ready to send commands.', 'primary-green', true);
+
+                const textEncoder = new TextEncoderStream();
+                textEncoder.readable.pipeTo(port.writable);
+                writer = textEncoder.writable.getWriter();
+
+                readSerialData();
+
+                startButton.disabled = false;
+
+                sendCommand(`SET_DURATION:${duration_value}`);
+
+
+            } catch (error) {
+                console.error("Serial connection failed or cancelled:", error);
+
+                if (error.name === 'SecurityError' || (error.message && error.message.includes('permissions policy'))) {
+                    updateSerialStatus('ERROR: Serial Access Denied. Please run this page in a new, trusted browser tab (e.g., Chrome) to enable Web Serial.', 'primary-red', false);
+                } else if (error.name === 'NotFoundError' || error.name === 'NotAllowedError') {
+                    updateSerialStatus('Disconnected (Connection Failed/Cancelled).', 'primary-red', false);
+                } else {
+                    updateSerialStatus(`Disconnected (Error: ${error.name}).`, 'primary-red', false);
+                }
+
+                port = null;
+                writer = null;
+                startButton.disabled = true;
+            }
+        }
+
+        async function readSerialData() {
+            try {
+                while (port && port.readable) {
+                    const textDecoder = new TextDecoderStream();
+                    port.readable.pipeTo(textDecoder.writable);
+                    const reader = textDecoder.readable.getReader();
+
+                    try {
+                        while (true) {
+                            const { value, done } = await reader.read();
+                            if (done) break;
+                            if (value) {
+                                const raw = value.trim();
+                                if (!raw) continue;
+                                console.log("Arduino response:", raw);
+
+                                // Normalize for matching
+                                const upper = raw.toUpperCase();
+
+                                // Device phrases to match
+                                const deviceEndedPhrase = "SESSION HAS ENDED";
+                                const sessionCompletePhraseB = "SESSION_COMPLETE";
+                                const sessionTimeCompletePhrase = "SESSION TIME COMPLETE";
+
+                                // If device declares session complete
+                                if (upper.includes(sessionTimeCompletePhrase) || upper.includes(sessionCompletePhraseB)) {
+                                    // Only treat as completed if a session is active
+                                    if (isSessionActive) {
+                                        updateStatus("Device reported session complete.", 'text-primary-green');
+                                        stopTimer(true);
+                                    } else {
+                                        // If not active, show a gentle acknowledgement
+                                        updateStatus("Device: session complete (ack).", 'text-gray-600');
+                                    }
+                                    continue;
+                                }
+
+                                // Handle the specific uppercase phrase the device may send
+                                if (upper.includes(deviceEndedPhrase)) {
+                                    // If this immediately follows a user STOP command, show acknowledgement but don't override manual stop status
+                                    const since = Date.now() - lastSentTime;
+                                    if (lastSentCommand === 'E' && since < 5000) {
+                                        console.log("Ignored device end-ack after manual stop.");
+                                        updateStatus("Device acknowledged STOP.", 'text-gray-600');
+                                    } else if (isSessionActive) {
+                                        // If session still active, treat as completion
+                                        stopTimer(true);
+                                    } else {
+                                        updateStatus("Device: session ended.", 'text-gray-600');
+                                    }
+                                    continue;
+                                }
+
+                                // Default: display sanitized device messages
+                                updateStatus(`Arduino: ${escapeHtml(raw)}`, 'text-accent-blue');
+                            }
+                        }
+                    } catch (readError) {
+                        console.error("Error reading serial data:", readError);
+                    } finally {
+                        reader.releaseLock();
+                    }
+                }
+            } catch (err) {
+                console.error("readSerialData outer error:", err);
+            }
+        }
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        async function sendCommand(command) {
+            if (!port || !writer) {
+                updateStatus("ERROR: Not connected to Arduino. Please connect first.", 'text-primary-red', true);
+                return;
+            }
+            try {
+                const trimmed = command.trim();
+                // Track last command and time
+                lastSentCommand = trimmed;
+                lastSentTime = Date.now();
+                // Clear it after a short period to avoid stale state
+                setTimeout(() => {
+                    if (Date.now() - lastSentTime > 5000) {
+                        lastSentCommand = null;
+                    }
+                }, 6000);
+
+                const data = command + '\n';
+                await writer.write(data);
+                console.log("Command sent:", data.trim());
+                updateStatus(`Sending command: <code class='font-mono bg-gray-200 px-1 rounded'>${escapeHtml(data.trim())}</code>`, 'text-accent-blue');
+            } catch (error) {
+                console.error("Failed to send command:", error);
+                updateSerialStatus('Serial Write Error.', 'primary-red', false);
+            }
+        }
+
+        function updateSerialStatus(text, color, isConnected) {
+            serialStatusText.textContent = text;
+            serialStatusText.className = `text-sm font-semibold text-${color}`;
+            serialStatusIcon.className = `w-3 h-3 rounded-full bg-${color}`;
+            connectButton.textContent = isConnected ? "Disconnect/Change Port" : "Connect Arduino";
+            connectButton.onclick = isConnected ? disconnectSerial : connectSerial;
+        }
+
+        async function disconnectSerial() {
+            try {
+                if (writer) {
+                    try { await writer.close(); } catch (e) {}
+                    writer = null;
+                }
+                if (port) {
+                    try { await port.close(); } catch (e) {}
+                    port = null;
+                }
+            } catch (err) {
+                console.error("Error during disconnect:", err);
+            } finally {
+                updateSerialStatus('Disconnected', 'primary-red', false);
+                startButton.disabled = true;
+                if (isSessionActive) {
+                    stopTimer(false);
+                    updateStatus("Session aborted due to device disconnect.", 'text-primary-red');
+                }
+            }
+        }
+
+        let current_value = 3.0;
+        let duration_value = 1;
+        let mode_display_text = "Anxiety/Depression";
+        let isDropdownOpen = false;
+        let isFirstTimeUser = true;
+        let currentPatientName = ''; // New variable for patient name
+
+        let timerInterval = null;
+        let timeRemainingSeconds = 0;
+        let actualDurationSeconds = 0;
+
+        let preSessionMood = null;
+        let postSessionMood = null;
+
+        let sessionHistory = [];
+
+        const electrodeDiagrams = {
+            'Anxiety/Depression': {
+                anode: '🔴 F3 (Left DLPFC)',
+                cathode: '🔵 Fp2 (Right Supraorbital)'
+            },
+            'Cognitive Enhancement': {
+                anode: '🔴 F3 (Left DLPFC)',
+                cathode: '🔵 Right Deltoid (Shoulder)'
+            },
+            'Pain Management': {
+                anode: '🔴 C3 (Left Motor Cortex)',
+                cathode: '🔵 Contralateral Cheek (Non-target side)'
+            }
+        };
+
+        const views = {
+            welcome: document.getElementById('welcome-view'),
+            info: document.getElementById('info-view'),
+            main: document.getElementById('main-view'),
+            moodPre: document.getElementById('mood-pre-view'),
+            moodPost: document.getElementById('mood-post-view'),
+            history: document.getElementById('history-view'),
+            graph: document.getElementById('graph-view')
+        };
+
+        const modeDisplayButton = document.getElementById('mode-select-display');
+        const modeDisplayTextSpan = document.getElementById('mode-display-text-span');
+        const modeOptions = document.getElementById('mode-options');
+        const dropdownArrow = document.getElementById('dropdown-arrow');
+
+        const currentSlider = document.getElementById('current-slider');
+        const durationSlider = document.getElementById('duration-slider');
+        const currentDisplay = document.getElementById('current-display');
+        const durationDisplay = document.getElementById('duration-display');
+        const startButton = document.getElementById('start-button');
+        const stopButton = document.getElementById('stop-button');
+        const statusDisplay = document.getElementById('status-display');
+
+        const safetyNotice = document.getElementById('safety-notice');
+        const diagramContent = document.getElementById('diagram-content');
+
+        const preMoodStatus = document.getElementById('pre-mood-status');
+        const postMoodStatus = document.getElementById('post-mood-status');
+        const historyCountSpan = document.getElementById('history-count');
+        const historyList = document.getElementById('history-list');
+
+        loadHistory();
+
+        function updateStatus(message, colorClass = 'text-gray-900', isConsole = false) {
+            statusDisplay.innerHTML = `STATUS: ${message}`;
+            statusDisplay.className = `text-base font-semibold ${colorClass}`;
+            if (isConsole) console.warn(message.replace(/<.*?>/g, ''));
+        }
+
+        function toggleDropdown() {
+            if (modeDisplayButton.disabled) return;
+            isDropdownOpen = !isDropdownOpen;
+            modeOptions.classList.toggle('hidden', !isDropdownOpen);
+            dropdownArrow.classList.toggle('rotate-180', isDropdownOpen);
+
+            if (isDropdownOpen) {
+                setTimeout(() => {
+                    modeOptions.classList.remove('opacity-0', 'scale-95');
+                }, 10);
+            } else {
+                modeOptions.classList.add('opacity-0', 'scale-95');
+            }
+        }
+
+        function selectMode(mode) {
+            mode_display_text = mode;
+            modeDisplayTextSpan.textContent = mode;
+            toggleDropdown();
+            updateDiagram();
+        }
+
+        function updateDiagram() {
+            const diagram = electrodeDiagrams[mode_display_text];
+            if (diagram) {
+                diagramContent.innerHTML = `
+                    <p>Anode: ${diagram.anode}</p>
+                    <p>Cathode: ${diagram.cathode}</p>
+                `;
+            }
+        }
+
+        function selectMoodEmoji(type, emoji) {
+            const container = type === 'Pre' ? views.moodPre : views.moodPost;
+            const emojiSpans = container.querySelectorAll('.mood-emoji');
+            const statusElement = type === 'Pre' ? preMoodStatus : postMoodStatus;
+
+            emojiSpans.forEach(span => span.classList.remove('selected'));
+
+            const selectedSpan = Array.from(emojiSpans).find(span => span.textContent === emoji);
+            if (selectedSpan) selectedSpan.classList.add('selected');
+
+            if (type === 'Pre') {
+                preSessionMood = emoji;
+                statusElement.textContent = `Pre-session mood set to: ${emoji}`;
+                const greenBtn = views.moodPre.querySelector('button.bg-primary-green');
+                if (greenBtn) greenBtn.textContent = "Start Session Now";
+            } else {
+                postSessionMood = emoji;
+                statusElement.textContent = `Post-session mood set to: ${emoji}`;
+            }
+        }
+
+        function changeView(viewName, isNewUser = null) {
+            Object.values(views).forEach(view => view.classList.add('hidden'));
+
+            if (viewName === 'graph') {
+                drawMoodChart();
+            }
+            if (isNewUser !== null && viewName === 'main') {
+                isFirstTimeUser = isNewUser;
+            }
+
+            const targetView = views[viewName];
+            if (targetView) {
+                targetView.classList.remove('hidden');
+            }
+
+            if (viewName === 'main') {
+                updateDiagram();
+                setSafetyLimits(isFirstTimeUser);
+                setControlsEnabled(true);
+                updateStatus("Ready to Start.", 'text-gray-900');
+                document.getElementById('feedback-summary').classList.add('hidden');
+                startButton.disabled = !port;
+                patientNameError.classList.add('hidden'); // Hide error on view change
+                // Set patient name for summary if available
+                document.getElementById('summary-patient-name').textContent = patientNameInput.value || 'N/A';
+            } else if (viewName === 'history') {
+                renderHistory();
+            }
+        }
+        function exportGraphAsPNG() {
+  const canvas = document.getElementById('mood-chart');
+  if (!canvas) return alert("No graph to export.");
+
+  // Redraw before export
+  if (typeof drawMoodChart === 'function') {
+      drawMoodChart();
+  }
+
+  // Create a temporary black-background copy
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width = canvas.width;
+  exportCanvas.height = canvas.height;
+  const ctx = exportCanvas.getContext('2d');
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, exportCanvas.width, exportCanvas.height);
+  ctx.drawImage(canvas, 0, 0);
+
+  const link = document.createElement('a');
+  link.download = `neuraease_mood_graph_${new Date().toISOString().split('T')[0]}.png`;
+  link.href = exportCanvas.toDataURL("image/png");
+  link.click();
+
+  updateStatus("Graph exported as PNG.", "text-primary-green");
+}
+        function updateCurrentValue(value) {
+            let rawValue = parseFloat(value);
+            if (isNaN(rawValue)) rawValue = 1.0;
+
+            const maxLimit = isFirstTimeUser ? 3.0 : 3.0;
+
+            if (rawValue > maxLimit) {
+                rawValue = maxLimit;
+                if (currentSlider) currentSlider.value = maxLimit;
+                updateStatus(`Current limited to ${maxLimit.toFixed(1)} mA for safety.`, 'text-primary-red');
+            }
+
+            if (rawValue < 0.5) {
+                rawValue = 0.5;
+                if (currentSlider) currentSlider.value = rawValue;
+            }
+
+            current_value = rawValue;
+            if (currentDisplay) currentDisplay.textContent = `${current_value.toFixed(1)} mA`;
+
+            if (port && !isSessionActive) {
+                sendCommand(`SET_CURRENT:${current_value.toFixed(1)}`);
+            } else if (port && isSessionActive) {
+                sendCommand(`SET_CURRENT:${current_value.toFixed(1)}`);
+                updateStatus(`WARNING: Current adjusted to ${current_value.toFixed(1)} mA mid-session.`, 'text-primary-red');
+            }
+        }
+
+        function updateDurationValue(value) {
+            let rawValue = parseInt(value);
+            if (isNaN(rawValue)) rawValue = 20;
+            duration_value = rawValue;
+            durationDisplay.textContent = `${duration_value} min`;
+
+            if (port) {
+                sendCommand(`SET_DURATION:${duration_value}`);
+                if (isSessionActive) {
+                    updateStatus(`Duration updated to ${duration_value} min. Session timer reset on device.`, 'text-primary-red');
+                    timeRemainingSeconds = duration_value * 60;
+                    actualDurationSeconds = duration_value * 60;
+                }
+            }
+        }
+
+        function setSafetyLimits(isNewUser) {
+            if (isNewUser) {
+                safetyNotice.classList.remove('hidden');
+                // Current slider might not exist in this HTML, this is a placeholder if it were added.
+                // If it existed, it would be:
+                // if (currentSlider) {
+                //     currentSlider.max = 2.0;
+                //     if (parseFloat(currentSlider.value) > 2.0) currentSlider.value = 2.0;
+                //     updateCurrentValue(currentSlider.value);
+                // } else {
+                    if (current_value > 3.0) {
+                        current_value = 3.0;
+                        // if (currentDisplay) currentDisplay.textContent = `${current_value.toFixed(1)} mA`;
+                    }
+                // }
+            } else {
+                safetyNotice.classList.add('hidden');
+                // If currentSlider existed:
+                // if (currentSlider) {
+                //     currentSlider.max = 3.0;
+                //     if (parseFloat(currentSlider.value) > 3.0) currentSlider.value = 3.0;
+                //     updateCurrentValue(currentSlider.value);
+                // }
+            }
+        }
+
+        function setControlsEnabled(enabled) {
+            const elements = [durationSlider, modeDisplayButton, patientNameInput]; // Include patientNameInput
+            elements.forEach(el => {
+                if (el) el.disabled = !enabled;
+            });
+            stopButton.disabled = enabled || !port;
+
+            if (!enabled && isDropdownOpen) {
+                toggleDropdown();
+            }
+        }
+
+        function startSimulation() {
+            currentPatientName = patientNameInput.value.trim();
+            if (!currentPatientName) {
+                patientNameError.classList.remove('hidden');
+                updateStatus("Please enter patient's name.", 'text-primary-red');
+                return;
+            }
+            patientNameError.classList.add('hidden');
+            
+            // Always show pre-session mood check for comparison
+            showPreSessionMoodCheck();
+        }
+
+        // ADD THIS FUNCTION RIGHT HERE:
+        function showPreSessionMoodCheck() {
+            // Reset pre-session mood selection
+            preSessionMood = null;
+            
+            // Clear any previously selected emojis
+            const emojiSpans = views.moodPre.querySelectorAll('.mood-emoji');
+            emojiSpans.forEach(span => span.classList.remove('selected'));
+            
+            // Reset status message
+            preMoodStatus.textContent = '';
+            
+            // Show the mood pre view
+            changeView('moodPre');
+        }
+
+        function startSimulationWithMood() {
+            if (!preSessionMood) {
+                preMoodStatus.textContent = "Please select a mood or click 'Skip Check-in'.";
+                return;
+            }
+            startSimulationCore();
+        }
+
+        async function startSimulationCore() {
+            if (!port) {
+                updateStatus("ERROR: Not connected to Arduino. Please click 'Connect Arduino'.", 'text-primary-red', true);
+                changeView('main');
+                return;
+            }
+            if (!mode_display_text) {
+                updateStatus("Please select a therapy Protocol first!", 'text-primary-red', true);
+                changeView('main');
+                return;
+            }
+            if (isSessionActive) return;
+
+            postSessionMood = null;
+            timeRemainingSeconds = duration_value * 60;
+            actualDurationSeconds = duration_value * 60;
+            isSessionActive = true;
+
+            changeView('main');
+            setControlsEnabled(false);
+            startButton.disabled = true;
+            stopButton.disabled = false;
+
+            await sendCommand(`SET_DURATION:${duration_value}`);
+            await sendCommand(`SET_CURRENT:${current_value.toFixed(1)}`);
+
+            await sendCommand(`S`);
+
+            startTimer();
+            updateStatus("SESSION STARTED. Timer displayed on device LCD.", 'text-primary-green');
+
+            // Add spinner when session starts
+            document.body.insertAdjacentHTML('beforeend', `
+                <div class="spinner" id="sessionSpinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            `);
+        }
+        
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+
+            timerInterval = setInterval(() => {
+                timeRemainingSeconds--;
+
+                if (timeRemainingSeconds <= 0) {
+                    timeRemainingSeconds = 0;
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    stopTimer(true);
+                    return;
+                }
+            }, 1000);
+        }
+        
+        function stopSimulation() {
+            if (!isSessionActive) return;
+
+            // Send stop command and mark it's a user-initiated stop
+            sendCommand('E');
+
+            // Remove spinner immediately
+            const spinner = document.getElementById('sessionSpinner');
+            if (spinner) {
+                spinner.remove();
+            }
+
+            // Immediately stop timer and mark manual stop
+            stopTimer(false);
+            updateStatus("Session STOPPED by user. Device OFF.", 'text-primary-red');
+        }
+
+        function stopTimer(wasCompleted) {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            isSessionActive = false;
+            setControlsEnabled(true);
+            startButton.disabled = !port;
+
+            // Remove spinner when timer stops
+            const spinner = document.getElementById('sessionSpinner');
+            if (spinner) {
+                spinner.remove();
+            }
+
+            const timeElapsedSeconds = actualDurationSeconds - timeRemainingSeconds;
+            if (wasCompleted || timeElapsedSeconds >= 60) {
+                sessionComplete(wasCompleted);
+            } else {
+                updateStatus("Session aborted. Duration too short to record.", 'text-gray-900');
+                changeView('main');
+            }
+        }
+
+        function sessionComplete(wasCompleted) {
+            const timeElapsedSeconds = actualDurationSeconds - timeRemainingSeconds;
+
+            document.getElementById('summary-patient-name').textContent = currentPatientName; // Set patient name in summary
+            document.getElementById('summary-protocol').textContent = mode_display_text;
+            document.getElementById('summary-params').textContent = `${current_value.toFixed(1)} mA for ${Math.floor(timeElapsedSeconds / 60)} min`;
+
+            if (wasCompleted) {
+                 updateStatus("Session Complete! Please record your post-session mood.", 'text-primary-green');
+            } else {
+                 updateStatus("Session Manually Ended. Please record your post-session mood.", 'text-primary-red');
+            }
+
+            changeView('moodPost');
+            document.getElementById('feedback-summary').classList.remove('hidden');
+        }
+
+        function getMoodNumericValue(emoji) {
+            const moodMap = { '😔': 1, '😐': 2, '😊': 3, '🤩': 4 };
+            return moodMap[emoji] || 0;
+        }
+
+        function getMoodArrow(pre, post) {
+            const preVal = getMoodNumericValue(pre);
+            const postVal = getMoodNumericValue(post);
+
+            if (postVal > preVal) return '⬆️';
+            if (postVal < preVal) return '⬇️';
+            return '➡️';
+        }
+
+        function completeSession() {
+            const timeElapsedSeconds = actualDurationSeconds - timeRemainingSeconds;
+            const finalDuration = Math.floor(timeElapsedSeconds / 60);
+
+            let moodChangeText = 'N/A';
+            let moodComparison = '';
+            
+            if (preSessionMood && postSessionMood) {
+                const pre = getMoodNumericValue(preSessionMood);
+                const post = getMoodNumericValue(postSessionMood);
+                const diff = post - pre;
+
+                if (diff > 0) {
+                    moodChangeText = `Mood Improved! (${preSessionMood} → ${postSessionMood})`;
+                    moodComparison = `+${diff} point improvement`;
+                } else if (diff < 0) {
+                    moodChangeText = `Mood Declined (${preSessionMood} → ${postSessionMood})`;
+                    moodComparison = `${Math.abs(diff)} point decline`;
+                } else {
+                    moodChangeText = `No Mood Change (${preSessionMood})`;
+                    moodComparison = 'Stable mood';
+                }
+            } else if (postSessionMood) {
+                moodChangeText = `Post-session mood: ${postSessionMood}`;
+            } else if (preSessionMood) {
+                moodChangeText = `Pre-session mood: ${preSessionMood}`;
+            }
+
+            const sessionData = {
+                timestamp: new Date().toISOString(),
+                patientName: currentPatientName,
+                protocol: mode_display_text,
+                current: current_value.toFixed(1) + ' mA',
+                duration: finalDuration + ' min',
+                preMood: preSessionMood,
+                postMood: postSessionMood,
+                notes: moodChangeText,
+                moodComparison: moodComparison
+            };
+
+            sessionHistory.unshift(sessionData);
+            saveHistory();
+
+            document.getElementById('summary-mood-change').textContent = moodChangeText;
+            if (moodComparison) {
+                document.getElementById('summary-mood-change').innerHTML += `<br><small class="text-gray-600">${moodComparison}</small>`;
+            }
+
+            preSessionMood = null;
+            postSessionMood = null;
+            currentPatientName = '';
+            patientNameInput.value = '';
+            changeView('main');
+        }
+
+        function saveHistory() {
+            localStorage.setItem('neuraease_history', JSON.stringify(sessionHistory));
+            historyCountSpan.textContent = sessionHistory.length;
+        }
+
+        function loadHistory() {
+            const storedHistory = localStorage.getItem('neuraease_history');
+            if (storedHistory) {
+                try {
+                    sessionHistory = JSON.parse(storedHistory);
+                } catch (e) {
+                    sessionHistory = [];
+                }
+            }
+            historyCountSpan.textContent = sessionHistory.length;
+        }
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            const noHistoryMessage = document.getElementById('no-history-message');
+
+            if (sessionHistory.length === 0) {
+                noHistoryMessage.classList.remove('hidden');
+                return;
+            }
+
+            noHistoryMessage.classList.add('hidden');
+
+            sessionHistory.forEach(session => {
+                const date = new Date(session.timestamp).toLocaleString();
+                const historyItem = document.createElement('div');
+                historyItem.className = 'p-4 bg-grey border border-gray-200 rounded-xl shadow-sm space-y-1 text-sm';
+
+                let moodGraphHtml = '';
+                if (session.preMood && session.postMood) {
+                    const preVal = getMoodNumericValue(session.preMood);
+                    const postVal = getMoodNumericValue(session.postMood);
+                    const maxMood = 4; // Max value for mood (🤩)
+
+                    const preWidth = (preVal / maxMood) * 100;
+                    const postWidth = (postVal / maxMood) * 100;
+
+                    moodGraphHtml = `
+                        <div class="mood-change-graph relative overflow-hidden">
+                            <div class="mood-bar mood-bar-pre" style="width: ${preWidth}%;"></div>
+                            <div class="mood-bar mood-bar-post" style="width: ${postWidth}%;"></div>
+                            <span class="mood-indicator absolute left-0">Pre: ${session.preMood}</span>
+                            <span class="mood-indicator absolute right-0">Post: ${session.postMood}</span>
+                        </div>
+                    `;
+                }
+
+                historyItem.innerHTML = `
+                    <p class="font-bold text-gray-800">${session.protocol} Session</p>
+                    <p class="text-xs text-gray-500">Patient: <strong>${session.patientName || 'N/A'}</strong></p>
+                    <p class="text-xs text-gray-500">${date}</p>
+                    <div class="flex justify-between mt-1 text-gray-700">
+                        <span>Duration: <strong>${session.duration}</strong></span>
+                        <span>Current: <strong>${session.current}</strong></span>
+                    </div>
+                    <p class="pt-1 text-xs text-gray-600">
+                        Mood Check:
+                        ${session.preMood ? `Pre ${session.preMood}` : 'Pre N/A'}
+                        |
+                        ${session.postMood ? `Post ${session.postMood}` : 'Post N/A'}
+                    </p>
+                    <p class="text-xs text-primary-green font-semibold">Outcome: ${session.notes} ${session.preMood && session.postMood ? ` ${getMoodArrow(session.preMood, session.postMood)}` : ''}</p>
+                    ${moodGraphHtml}
+                `;
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        window.onload = () => {
+            // currentSlider is not present in the HTML, so this part is commented out or adjusted.
+            // if (currentSlider) {
+            //     currentSlider.value = Math.max(parseFloat(currentSlider.min), Math.min(parseFloat(currentSlider.max), current_value));
+            //     updateCurrentValue(currentSlider.value);
+            // } else {
+            //     if (currentDisplay) currentDisplay.textContent = `${current_value.toFixed(1)} mA`;
+            // }
+            if (durationSlider) updateDurationValue(durationSlider.value);
+            updateDiagram();
+            setSafetyLimits(isFirstTimeUser);
+            changeView('welcome');
+        };
+    </script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    particlesJS('particles-js', {
+        particles: {
+            number: {
+                value: 200,
+                density: {
+                    enable: true,
+                    value_area: 400
+                }
+            },
+            color: {
+                value: ['#ffffff', '#383535', '#6C6565']
+            },
+            shape: {
+                type: 'circle',
+                stroke: {
+                    width: 1,
+                    color: '#ffffff'
+                }
+            },
+            opacity: {
+                value: 1.5,
+                random: true,
+                anim: {
+                    enable: true,
+                    speed: 1,
+                    opacity_min: 1.5,
+                    sync: true
+                }
+            },
+            size: {
+                value: 4,
+                random: true,
+                anim: {
+                    enable: true,
+                    speed: 2,
+                    size_min: 2,
+                    sync: false
+                }
+            },
+            line_linked: {
+                enable: false,
+                distance: 100,
+                color: '#ffffff',
+                opacity: 1.5,
+                width: 1
+            },
+            move: {
+                enable: true,
+                speed: 2,
+                direction: 'none',
+                random: true,
+                straight: false,
+                out_mode: 'out',
+                bounce: false,
+                attract: {
+                    enable: false,
+                    rotateX: 600,
+                    rotateY: 1200
+                }
+            }
+        },
+        interactivity: {
+            detect_on: 'canvas',
+            events: {
+                onhover: {
+                    enable: false,
+                    mode: 'grab'
+                },
+                onclick: {
+                    enable: false,
+                    mode: 'push'
+                },
+                resize: true
+            },
+            modes: {
+                grab: {
+                    distance: 200,
+                    line_linked: {
+                        opacity: 1.5
+                    }
+                },
+                push: {
+                    particles_nb: 10
+                }
+            }
+        },
+        retina_detect: true
+    });
+});
+</script>
+</body>
+</html>
